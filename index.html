@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <Title>Rock Paper Scissors: Firebase Style</Title>
+    <link rel="stylesheet" href="assets/css/reset.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <div id="bodyWrapper">
+
+        <div clsas="jumbotron">
+            <h1 class="text-center pb-4">Rock Paper Scissors: Firebase Style</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- First Player Section -->
+                <div class="col-4 p-4">
+                    <div class ="playerBox" id="firstPlayerBox"></div>
+                </div>
+
+                <!-- Score Board -->
+                <div class="col-4 p-4">
+                    <div id="scoreboard"></div>
+                </div>
+
+                <!-- Second Player Section -->
+                <div class="col-4 p-4">
+                    <div class ="playerBox" id="secondPlayerBox"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+                <!-- Chat Box -->
+                <div class="col-8 p-4">
+                    <div id="chatBox"></div>
+                </div>
+
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+                <!-- Message Submit -->
+                <div class="col-7 p-1">
+                    <div id="messageForm">
+                        <form>
+                            <div class="form group">
+                                <input type="text" class="form-control" id="message" placeholder="Tell them how their rock-paper-scissor skills are weak.">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="col-1 p-1">
+                    <button type="submit" class="btn btn-primary" id="messageSubmit">Send</button>
+                </div>
+
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
