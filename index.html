@@ -21,6 +21,35 @@
 
             <div class="row">
 
+                <!-- Spacing -->
+                <div class="col-4">
+                </div>
+
+                <!-- Name Input -->
+                <div class="col-3 p-1">
+                    <form>
+                        <input type="text" id="name" placeholder="To begin, enter your name.">
+                    </form>>
+                </div>
+
+                <!-- Name Input Submit Button -->
+                <div class="col-1">
+                    <form>
+                        <button type="submit" class="btn btn-primary" id="submitName" value="startGame">Send</button>
+                    </form>>
+                </div>
+
+                <!-- Spacing -->
+                <div class="col-4">
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+
                 <!-- First Player Section -->
                 <div class="col-4 p-4">
                     <div class ="playerBox" id="firstPlayerBox"></div>
@@ -90,6 +119,16 @@
         </div>
 
     </div>
+
+    <!-- Script References -->
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-database.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="assets/javascript/app.js"></script>
+
 </body>
 
 </html>
