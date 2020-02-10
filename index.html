@@ -19,25 +19,26 @@
 
         <div class="container">
 
-            <div class="row">
+            <div class="row messages">
 
                 <!-- Spacing -->
                 <div class="col-4">
                 </div>
 
                 <!-- Name Input -->
-                <div class="col-3 p-1">
+                <div class="col-3 p-1 nameInput">
                     <form>
                         <input type="text" id="name" placeholder="To begin, enter your name.">
-                    </form>>
+                    </form>
                 </div>
 
                 <!-- Name Input Submit Button -->
-                <div class="col-1">
+                <div class="col-1 nameInputButton">
                     <form>
                         <button type="submit" class="btn btn-primary" id="submitName" value="startGame">Send</button>
-                    </form>>
+                    </form>
                 </div>
+
 
                 <!-- Spacing -->
                 <div class="col-4">
@@ -52,7 +53,9 @@
 
                 <!-- First Player Section -->
                 <div class="col-4 p-4">
-                    <div class ="playerBox" id="firstPlayerBox"></div>
+                    <div class="card playerBox firstPlayerBox">
+                        <div class="card-body playerBox"></div>
+                    </div>
                 </div>
 
                 <!-- Score Board -->
@@ -62,7 +65,8 @@
 
                 <!-- Second Player Section -->
                 <div class="col-4 p-4">
-                    <div class ="playerBox" id="secondPlayerBox"></div>
+                    <div class="card playerBox secondPlayerBox">
+                    </div>
                 </div>
 
             </div>
