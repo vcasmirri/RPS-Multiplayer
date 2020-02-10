@@ -121,6 +121,7 @@ playerOne.on("value", function (snapshot) {
         playerOneTitle.text(player1);
         $(".firstPlayerBox").prepend(playerOneTitle);
     } else {
+        $(".playerOneHeader").remove();
         playerOneTitle = $("<div>");
         playerOneTitle.addClass("card-header playerOneHeader");
         playerOneTitle.text("Player 1 has not yet entered");
@@ -140,6 +141,7 @@ playerTwo.on("value", function (snapshot) {
         playerTwoTitle.text(player2);
         $(".secondPlayerBox").prepend(playerTwoTitle);
     } else {
+        $(".playerTwoHeader").remove();
         playerTwoTitle = $("<div>");
         playerTwoTitle.addClass("card-header playerTwoHeader");
         playerTwoTitle.text("Player 2 has not yet entered.");
@@ -151,6 +153,9 @@ playerTwo.on("value", function (snapshot) {
 
 currentStep.on("value", function (snapshot) {
     console.log("The current step is: " + snapshot.val().step);
+    if (snapshot.val().step === 0) {
+        $(".updates").empty();
+    }
     if (snapshot.val()) {
         if (snapshot.val().step === 2 && playerOrder === 1) {
             $(".messages").empty();
@@ -170,8 +175,13 @@ currentStep.on("value", function (snapshot) {
             choice.text(selection[i]);
             $(".playerOneSelect").append(choice);
         }
+        $(".updates").html("<h3>Choose wisely.</h3>");
         console.log("Player 1's selection should be on screen now.");
         console.log("The player order is " + playerOrder);
+
+        // ADD A CLICK FUNCTION HERE TO MOVE TO THE NEXT STEP AND STUFF
+
+
     } else if (snapshot.val().step === 2 && playerOrder === 2) {
         $("#playerTwoSelect").empty();
         $(".messages").empty();
@@ -181,7 +191,7 @@ currentStep.on("value", function (snapshot) {
             choice.text(selection[i]);
             $(".playerTwoSelect").append(choice);
         }
-        console.log("PLayer 2's selection should be on scree now.");
+        console.log("Player 2's selection should be on screen now.");
     } else if (snapshot.val().step === 3) {
         messages.html("");
     }
