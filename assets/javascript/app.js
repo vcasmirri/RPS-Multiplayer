@@ -35,6 +35,8 @@ var playerTwoWins = 0;
 var playerOneLosses = 0;
 var playerTwoLosses = 0;
 var playerOrder = 0;
+var messages;
+var selection = ["ROCK", "PAPER", "SCISSORS"];
 
 
 // var connectedRef = database.ref(".info/connected");
@@ -54,6 +56,8 @@ var playerOrder = 0;
     //         con.onDisconnect().remove();
     //     }
     // })
+
+
 
 // Sets player name and stuff
 $("#submitName").on("click", function() {
@@ -79,11 +83,15 @@ $("#submitName").on("click", function() {
             lossCount: 0
         });
         $(".messages").empty();
-        var messages = $("<div>");
+        messages = $("<div>");
         messages.addClass("col-12 p-4 text-center");
         messages.html("<h3>Welcome, " + player + "! You're the first to arrive. Waiting on Player 2.</h3>");
         $(".messages").append(messages);
-    } else if (playerOneSnap) {
+        currentStep.update({
+            step: 0
+        })
+        $(".playerOneSelect").empty();
+    } else if (playerOneSnap.exists() && !playerTwoSnap.exists()) {
         playerOrder = 2;
         playerTwo.onDisconnect().remove();
         playerTwo.set({
@@ -92,17 +100,14 @@ $("#submitName").on("click", function() {
             lossCount: 0
         })
         $(".messages").empty();
-        var messages = $("<div>");
+        messages = $("<div>");
         messages.addClass("col-12 p-4 text-center");
-        messages.html("<h3>Welcome, " + player + "! Let's begin. Waiting for " + player1 + " to choose.</h3>");
         $(".messages").append(messages);
         currentStep.update({
             step: 1
         })
-    } else [
-
-    ]
-    console.log("Player order is " + playerOrder);
+    } else 
+    console.log("Sorry! No more room in the castle.");
 })
 
 
@@ -110,13 +115,16 @@ $("#submitName").on("click", function() {
 playerOne.on("value", function (snapshot) {
     if (snapshot.val() !== null) {
         player1 = snapshot.val().player;
-        $(".firstPlayerBox").empty();
-        var playerOneTitle = $("<h4>");
-        playerOneTitle.addClass("card-header");
+        $(".playerOneHeader").remove();
+        var playerOneTitle = $("<div>");
+        playerOneTitle.addClass("card-header playerOneHeader");
         playerOneTitle.text(player1);
-        $(".firstPlayerBox").append(playerOneTitle);
+        $(".firstPlayerBox").prepend(playerOneTitle);
     } else {
-        $(".firstPlayerBox").html("Player 1 has not yet entered");
+        playerOneTitle = $("<div>");
+        playerOneTitle.addClass("card-header playerOneHeader");
+        playerOneTitle.text("Player 1 has not yet entered");
+        $(".firstPlayerBox").prepend(playerOneTitle);
     }},
     function (errorObject) {
         console.log("Failed to read. Code: " + errorObject.code);
@@ -126,13 +134,16 @@ playerOne.on("value", function (snapshot) {
 playerTwo.on("value", function (snapshot) {
     if (snapshot.val() !== null) {
         player2 = snapshot.val().player;
-        $(".secondPlayerBox").empty();
-        var playerTwoTitle = $("<h4>");
-        playerTwoTitle.addClass("card-header");
+        $(".playerTwoHeader").remove();
+        var playerTwoTitle = $("<div>");
+        playerTwoTitle.addClass("card-header playerTwoHeader");
         playerTwoTitle.text(player2);
-        $(".secondPlayerBox").append(playerTwoTitle);
+        $(".secondPlayerBox").prepend(playerTwoTitle);
     } else {
-        $(".secondPlayerBox").html("Player 2 has not yet entered");
+        playerTwoTitle = $("<div>");
+        playerTwoTitle.addClass("card-header playerTwoHeader");
+        playerTwoTitle.text("Player 2 has not yet entered.");
+        $(".secondPlayerBox").prepend(playerTwoTitle);
     }},
     function (errorObject) {
         console.log("Failed to read. Code: " + errorObject.code);
@@ -140,4 +151,38 @@ playerTwo.on("value", function (snapshot) {
 
 currentStep.on("value", function (snapshot) {
     console.log("The current step is: " + snapshot.val().step);
+    if (snapshot.val()) {
+        if (snapshot.val().step === 2 && playerOrder === 1) {
+            $(".messages").empty();
+            $(".updates").html("<h3>Waiting for " + player2 + " to choose. I see you shiver with...anticipation.</h3>");
+        } else if (snapshot.val().step === 1 && playerOrder === 2) {
+            $(".playerOneSelect").empty();
+            $(".messages").empty();
+            $(".updates").html("<h3>Waiting for " + player1 + " to choose. I see you shiver with...anticipation.</h3>");
+        }
+    }
+    if (snapshot.val().step === 1 && playerOrder === 1) {
+        $(".playerOneSelect").empty();
+        $(".messages").empty();
+        for (i=0; i < selection.length; i++) {
+            var choice = $("<li>");
+            choice.addClass("list-group-item");
+            choice.text(selection[i]);
+            $(".playerOneSelect").append(choice);
+        }
+        console.log("Player 1's selection should be on screen now.");
+        console.log("The player order is " + playerOrder);
+    } else if (snapshot.val().step === 2 && playerOrder === 2) {
+        $("#playerTwoSelect").empty();
+        $(".messages").empty();
+        for (i=0; i < selection.length; i++) {
+            var choice = $("<li>");
+            choice.addClass("list-group-item");
+            choice.text(selection[i]);
+            $(".playerTwoSelect").append(choice);
+        }
+        console.log("PLayer 2's selection should be on scree now.");
+    } else if (snapshot.val().step === 3) {
+        messages.html("");
+    }
 })
