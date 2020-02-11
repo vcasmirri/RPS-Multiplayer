@@ -35,6 +35,8 @@ var playerTwoWins = 0;
 var playerOneLosses = 0;
 var playerTwoLosses = 0;
 var playerOrder = 0;
+var p1choice;
+var p2choice;
 var messages;
 var selection = ["ROCK", "PAPER", "SCISSORS"];
 
@@ -57,7 +59,11 @@ var selection = ["ROCK", "PAPER", "SCISSORS"];
     //     }
     // })
 
-
+$(document).ready(function() {
+    currentStep.update({
+        step: 0
+    })
+})
 
 // Sets player name and stuff
 $("#submitName").on("click", function() {
@@ -131,7 +137,7 @@ playerOne.on("value", function (snapshot) {
         console.log("Failed to read. Code: " + errorObject.code);
     });
 
-// Update info for player one when database updates
+// Update info for player two when database updates
 playerTwo.on("value", function (snapshot) {
     if (snapshot.val() !== null) {
         player2 = snapshot.val().player;
@@ -150,6 +156,54 @@ playerTwo.on("value", function (snapshot) {
     function (errorObject) {
         console.log("Failed to read. Code: " + errorObject.code);
     });
+
+
+// Step 3/game logic
+function determineWinner () {
+    // Displays the players' choices
+    if (playerOneChoice == "SCISSORS") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/scissors.png");
+        $(".playerOneSelect").append(choiceImage);
+    } else if (playerOneChoice == "ROCK") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/rock.png");
+        $(".playerOneSelect").append(choiceImage);
+    } else if (playerOneChoice == "PAPER") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/paper.png");
+        $(".playerOneSelect").append(choiceImage);
+    }
+    if (playerTwoChoice == "SCISSORS") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/scissors.png");
+        $(".playerTwoSelect").append(choiceImage);
+    } else if (playerTwoChoice == "ROCK") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/rock.png");
+        $(".playerTwoSelect").append(choiceImage);
+    } else if (playerOneChoice == "PAPER") {
+        var choiceImage = $("<img>");
+        choiceImage.addClass("choiceImage");
+        choiceImage.attr("src", "./assets/images/paper.png");
+        $(".playerTwoSelect").append(choiceImage);
+    }
+    
+    if (playerOneChoice == playerTwoChoice) {
+        $(".updates").html("<h3>It's a tie!</h3>");
+    } else if ((playerOneChoice == "SCISSORS" && playerTwoChoice == "ROCK")
+            || (playerOneChoice == "PAPER" && playerTwoChoice == "SCISSORS")
+            || (playerOneChoice == "ROCK" && playerTwoChoice == "PAPER")) {
+        $(".updates").html("<h3>" + player2 + " wins!</h3>");
+   } else {
+    $(".updates").html("<h3>" + player1 + " wins!</h3>");
+   }
+}
 
 currentStep.on("value", function (snapshot) {
     console.log("The current step is: " + snapshot.val().step);
@@ -185,6 +239,9 @@ currentStep.on("value", function (snapshot) {
         // Stores player one's choice and sets it to player 2's turn
         $(".list-group-item").on("click", function() {
             playerOneChoice = $(this).text();
+            playerOne.set({
+                choice : playerOneChoice
+            });
             console.log("Player one chose: " + playerOneChoice);
             $(".playerOneSelect").empty();
             currentStep.update({
@@ -219,5 +276,7 @@ currentStep.on("value", function (snapshot) {
         console.log("Player 2's selection should be on screen now.");
     } else if (snapshot.val().step === 3) {
         $(".updates").html("<h3>This is step 3.</h3>");
-    }
+
+        determineWinner();
+}
 })
