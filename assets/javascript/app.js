@@ -118,7 +118,7 @@ $("#submitName").on("click", function() {
             step: 1
         })
     } else 
-    console.log("Sorry! No more room in the castle.");
+    console.log("Sorry! Only two players at a time.");
 })
 
 
@@ -131,12 +131,21 @@ playerOne.on("value", function (snapshot) {
         playerOneTitle.addClass("card-header playerOneHeader");
         playerOneTitle.text(player1);
         $(".firstPlayerBox").prepend(playerOneTitle);
+        playerOneWins = snapshot.val().winCount;
+        playerOneLosses = snapshot.val().lossCount;
+        $(".scoreboard1").text(player1 + " has " + playerOneWins + " wins and " + playerOneLosses + " losses.");
     } else {
         $(".playerOneHeader").remove();
+        $(".scoreboard1").empty();
         playerOneTitle = $("<div>");
         playerOneTitle.addClass("card-header playerOneHeader");
         playerOneTitle.text("Player 1 has not yet entered");
         $(".firstPlayerBox").prepend(playerOneTitle);
+        currentStep.update({
+            step: 0
+        });
+        $(".playerOneSelect").empty();
+        $(".playerTwoSelect").empty();
     }},
     function (errorObject) {
         console.log("Failed to read. Code: " + errorObject.code);
@@ -151,12 +160,21 @@ playerTwo.on("value", function (snapshot) {
         playerTwoTitle.addClass("card-header playerTwoHeader");
         playerTwoTitle.text(player2);
         $(".secondPlayerBox").prepend(playerTwoTitle);
+        playerTwoWins = snapshot.val().winCount;
+        playerTwoLosses = snapshot.val().lossCount;
+        $(".scoreboard2").text(player2 + " has " + playerTwoWins + " wins and " + playerTwoLosses + " losses.");
     } else {
         $(".playerTwoHeader").remove();
+        $(".scoreboard2").empty();
         playerTwoTitle = $("<div>");
         playerTwoTitle.addClass("card-header playerTwoHeader");
         playerTwoTitle.text("Player 2 has not yet entered.");
         $(".secondPlayerBox").prepend(playerTwoTitle);
+        currentStep.update({
+            step: 0
+        });
+        $(".playerOneSelect").empty();
+        $(".playerTwoSelect").empty();
     }},
     function (errorObject) {
         console.log("Failed to read. Code: " + errorObject.code);
@@ -219,7 +237,35 @@ function determineWinner () {
             playerOneLosses++;
         }
         
-
+        setTimeout(function () {
+			currentStep.update({
+				step: 1
+			});
+			playerOne.once("value", function (snapshot) {
+				p1choice = snapshot;
+			}, function (errorObject) {
+				console.log("Failed to read. Code: " + errorObject.code);
+			});
+			if (p1choice.val() !== null) {
+				playerOne.update({
+					winCount: playerOneWins,
+					lossCount: playerOneLosses
+				});
+			};
+			playerTwo.once("value", function (snapshot) {
+				p2choice = snapshot;
+			}, function (errorObject) {
+				console.log("Failed to read. Code: "+ errorObject.code);
+			});
+			if (p2choice.val() !== null) {
+				playerTwo.update({
+					winCount: playerTwoWins,
+					lossCount: playerTwoLosses
+				});
+			};
+            $(".updates").empty();
+            $(".playerTwoSelect").empty();
+		}, 2500);
     
 //     if (playerOneChoice == playerTwoChoice) {
 //         $(".updates").html("<h3>It's a tie!</h3>");
@@ -252,6 +298,7 @@ currentStep.on("value", function (snapshot) {
     // Sets player one's turn
     if (snapshot.val().step === 1 && playerOrder === 1) {
         $(".playerOneSelect").empty();
+        $(".updates").html("");
         $(".messages").empty();
         for (i=0; i < selection.length; i++) {
             var choice = $("<li>");
@@ -279,6 +326,7 @@ currentStep.on("value", function (snapshot) {
         // Sets player 2's turn
     } else if (snapshot.val().step === 2 && playerOrder === 2) {
         $("#playerTwoSelect").empty();
+        $(".updates").html("");
         $(".messages").empty();
         for (i=0; i < selection.length; i++) {
             var choice = $("<li>");
@@ -310,3 +358,12 @@ currentStep.on("value", function (snapshot) {
         determineWinner();
 }
 })
+
+// Resets the game if both players leaves
+connectionsRef.on("value", function (snapshot) {
+	if (snapshot.val() == null) {
+		currentStep.set({});
+	};
+}, function (errorObject) {
+	console.log("Failed to read. Code: " + errorObject.code);
+});
