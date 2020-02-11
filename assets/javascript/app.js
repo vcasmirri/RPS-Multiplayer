@@ -1,3 +1,8 @@
+// Next: create function to reset game, display wins and losses persistently, create chat function.
+
+
+
+
 // Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyDrnEKax-Iq93rOCyBqP1ogWJrrBWWUmLI",
@@ -176,8 +181,44 @@ function determineWinner () {
             $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
             $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
             $(".updates").html("<h3>It's a tie!</h3>");
+        } else if (p1choice.val().choice == "ROCK" && p2choice.val().choice == "SCISSORS") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player1 + " wins!</h3>");
+            playerOneWins++;
+            playerTwoLosses++;
+        } else if (p1choice.val().choice == "PAPER" && p2choice.val().choice == "ROCK") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player1 + " wins!</h3>");
+            playerOneWins++;
+            playerTwoLosses++;
+        } else if (p1choice.val().choice == "SCISSORS" && p2choice.val().choice == "PAPER") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player1 + " wins!</h3>");
+            playerOneWins++;
+            playerTwoLosses++;
+        } else if (p1choice.val().choice == "ROCK" && p2choice.val().choice == "PAPER") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player2 + " wins!</h3>");
+            playerTwoWins++;
+            playerOneLosses++;
+        } else if (p1choice.val().choice == "PAPER" && p2choice.val().choice == "SCISSORS") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player2 + " wins!</h3>");
+            playerTwoWins++;
+            playerOneLosses++;
+        } else if (p1choice.val().choice == "SCISSORS" && p2choice.val().choice == "ROCK") {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>" + player2 + " wins!</h3>");
+            playerTwoWins++;
+            playerOneLosses++;
         }
-    }
+        
 
     
 //     if (playerOneChoice == playerTwoChoice) {
@@ -189,7 +230,7 @@ function determineWinner () {
 //    } else {
 //     $(".updates").html("<h3>" + player1 + " wins!</h3>");
 //    }
-}
+}}
 
 currentStep.on("value", function (snapshot) {
     console.log("The current step is: " + snapshot.val().step);
