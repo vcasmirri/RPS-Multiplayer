@@ -156,16 +156,19 @@ currentStep.on("value", function (snapshot) {
     if (snapshot.val().step === 0) {
         $(".updates").empty();
     }
+
+    // Waiting messages when it's not current player's turn
     if (snapshot.val()) {
         if (snapshot.val().step === 2 && playerOrder === 1) {
             $(".messages").empty();
-            $(".updates").html("<h3>Waiting for " + player2 + " to choose. I see you shiver with...anticipation.</h3>");
+            $(".updates").html("<h3>Waiting for " + player2 + " to choose.</h3>");
         } else if (snapshot.val().step === 1 && playerOrder === 2) {
             $(".playerOneSelect").empty();
             $(".messages").empty();
-            $(".updates").html("<h3>Waiting for " + player1 + " to choose. I see you shiver with...anticipation.</h3>");
+            $(".updates").html("<h3>Waiting for " + player1 + " to choose.</h3>");
         }
     }
+    // Sets player one's turn
     if (snapshot.val().step === 1 && playerOrder === 1) {
         $(".playerOneSelect").empty();
         $(".messages").empty();
@@ -179,9 +182,17 @@ currentStep.on("value", function (snapshot) {
         console.log("Player 1's selection should be on screen now.");
         console.log("The player order is " + playerOrder);
 
-        // ADD A CLICK FUNCTION HERE TO MOVE TO THE NEXT STEP AND STUFF
-
-
+        // Stores player one's choice and sets it to player 2's turn
+        $(".list-group-item").on("click", function() {
+            playerOneChoice = $(this).text();
+            console.log("Player one chose: " + playerOneChoice);
+            $(".playerOneSelect").empty();
+            currentStep.update({
+                step: 2
+            })
+        })
+    
+        // Sets player 2's turn
     } else if (snapshot.val().step === 2 && playerOrder === 2) {
         $("#playerTwoSelect").empty();
         $(".messages").empty();
@@ -191,8 +202,22 @@ currentStep.on("value", function (snapshot) {
             choice.text(selection[i]);
             $(".playerTwoSelect").append(choice);
         }
+        $(".updates").html("<h3>Choose wisely.</h3>");
+        console.log("Player 1's selection should be on screen now.");
+        console.log("The player order is " + playerOrder);
+
+        // Stores player two's choice and sets it to step 3
+        $(".list-group-item").on("click", function() {
+            playerTwoChoice = $(this).text();
+            console.log("Player two chose: " + playerTwoChoice);
+            $(".playerTwoSelect").empty();
+            currentStep.update({
+                step: 3
+            })
+        })
+
         console.log("Player 2's selection should be on screen now.");
     } else if (snapshot.val().step === 3) {
-        messages.html("");
+        $(".updates").html("<h3>This is step 3.</h3>");
     }
 })
