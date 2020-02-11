@@ -35,8 +35,8 @@ var playerTwoWins = 0;
 var playerOneLosses = 0;
 var playerTwoLosses = 0;
 var playerOrder = 0;
-var p1choice;
-var p2choice;
+var p1choice = null;
+var p2choice = null;
 var messages;
 var selection = ["ROCK", "PAPER", "SCISSORS"];
 
@@ -160,49 +160,35 @@ playerTwo.on("value", function (snapshot) {
 
 // Step 3/game logic
 function determineWinner () {
-    // Displays the players' choices
-    if (playerOneChoice == "SCISSORS") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/scissors.png");
-        $(".playerOneSelect").append(choiceImage);
-    } else if (playerOneChoice == "ROCK") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/rock.png");
-        $(".playerOneSelect").append(choiceImage);
-    } else if (playerOneChoice == "PAPER") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/paper.png");
-        $(".playerOneSelect").append(choiceImage);
+    // Discovers players' choices
+    playerOne.once("value", function (snapshot) {
+        p1choice = snapshot;
+    }, function (errorObject) {
+            console.log("Failed to read: " + errorObject.code);
+    });
+    playerTwo.once("value", function (snapshot) {
+        p2choice = snapshot;
+    }, function (errorObject) {
+            console.log("Failed to read: " + errorObject.code);
+    });
+    if (p1choice.val() && p2choice.val()) {
+        if (p1choice.val().choice == p2choice.val().choice) {
+            $(".playerOneSelect").html("<h1>" + p1choice.val().choice + "</h1>");
+            $(".playerTwoSelect").html("<h1>" + p2choice.val().choice + "</h1>");
+            $(".updates").html("<h3>It's a tie!</h3>");
+        }
     }
-    if (playerTwoChoice == "SCISSORS") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/scissors.png");
-        $(".playerTwoSelect").append(choiceImage);
-    } else if (playerTwoChoice == "ROCK") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/rock.png");
-        $(".playerTwoSelect").append(choiceImage);
-    } else if (playerOneChoice == "PAPER") {
-        var choiceImage = $("<img>");
-        choiceImage.addClass("choiceImage");
-        choiceImage.attr("src", "./assets/images/paper.png");
-        $(".playerTwoSelect").append(choiceImage);
-    }
+
     
-    if (playerOneChoice == playerTwoChoice) {
-        $(".updates").html("<h3>It's a tie!</h3>");
-    } else if ((playerOneChoice == "SCISSORS" && playerTwoChoice == "ROCK")
-            || (playerOneChoice == "PAPER" && playerTwoChoice == "SCISSORS")
-            || (playerOneChoice == "ROCK" && playerTwoChoice == "PAPER")) {
-        $(".updates").html("<h3>" + player2 + " wins!</h3>");
-   } else {
-    $(".updates").html("<h3>" + player1 + " wins!</h3>");
-   }
+//     if (playerOneChoice == playerTwoChoice) {
+//         $(".updates").html("<h3>It's a tie!</h3>");
+//     } else if ((playerOneChoice == "SCISSORS" && playerTwoChoice == "ROCK")
+//             || (playerOneChoice == "PAPER" && playerTwoChoice == "SCISSORS")
+//             || (playerOneChoice == "ROCK" && playerTwoChoice == "PAPER")) {
+//         $(".updates").html("<h3>" + player2 + " wins!</h3>");
+//    } else {
+//     $(".updates").html("<h3>" + player1 + " wins!</h3>");
+//    }
 }
 
 currentStep.on("value", function (snapshot) {
@@ -239,7 +225,7 @@ currentStep.on("value", function (snapshot) {
         // Stores player one's choice and sets it to player 2's turn
         $(".list-group-item").on("click", function() {
             playerOneChoice = $(this).text();
-            playerOne.set({
+            playerOne.update({
                 choice : playerOneChoice
             });
             console.log("Player one chose: " + playerOneChoice);
@@ -266,6 +252,9 @@ currentStep.on("value", function (snapshot) {
         // Stores player two's choice and sets it to step 3
         $(".list-group-item").on("click", function() {
             playerTwoChoice = $(this).text();
+            playerTwo.update({
+                choice : playerTwoChoice
+            });
             console.log("Player two chose: " + playerTwoChoice);
             $(".playerTwoSelect").empty();
             currentStep.update({
