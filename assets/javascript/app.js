@@ -238,6 +238,7 @@ function determineWinner () {
         }
         
         setTimeout(function () {
+            // $(".updates").empty();
 			currentStep.update({
 				step: 1
 			});
@@ -263,7 +264,6 @@ function determineWinner () {
 					lossCount: playerTwoLosses
 				});
 			};
-            $(".updates").empty();
             $(".playerTwoSelect").empty();
 		}, 2500);
     
@@ -367,3 +367,21 @@ connectionsRef.on("value", function (snapshot) {
 }, function (errorObject) {
 	console.log("Failed to read. Code: " + errorObject.code);
 });
+
+// Chat Function
+
+$("#messageSubmit").on("click", function (event) {
+    event.preventDefault();
+    var chatMessage = $("#message").val().trim();
+    if (chatMessage !== "") {
+        database.ref("/messages/").push({
+            player : player+" says: ",
+            message : chatMessage,
+            timestamp : firebase.database.ServerValue.TIMESTAMP
+        })
+    }
+})
+
+database.ref("/messages/").orderByChild("timestamp").on("child_added", function(snapshot) {
+	$("#chatArea").append(snapshot.val().player + snapshot.val().message + "<br>");
+})

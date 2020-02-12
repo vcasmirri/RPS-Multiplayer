@@ -13,7 +13,7 @@
 
     <div id="bodyWrapper">
 
-        <div clsas="jumbotron">
+        <div class="jumbotron">
             <h1 class="text-center pb-4">Rock Paper Scissors: Firebase Style</h1>
         </div>
 
@@ -32,26 +32,22 @@
             <div class="row messages">
 
                 <!-- Spacing -->
-                <div class="col-4">
+                <div class="col-2">
                 </div>
 
                 <!-- Name Input -->
-                <div class="col-3 p-1 nameInput">
-                    <form>
-                        <input type="text" id="name" placeholder="To begin, enter your name.">
-                    </form>
-                </div>
-
-                <!-- Name Input Submit Button -->
-                <div class="col-1 nameInputButton">
-                    <form>
-                        <button type="submit" class="btn btn-primary" id="submitName" value="startGame">Send</button>
-                    </form>
+                <div class="col-8 p-1">
+                    <div id="nameInput">
+                        <button style="float: right" type="submit" class="btn btn-primary" id="submitName" value="startGame">Send</button>
+                        <form style="float: right">
+                            <input type="text" class="form-control" id="name" placeholder="To begin, enter your name.">
+                        </form>
+                    </div>
                 </div>
 
 
                 <!-- Spacing -->
-                <div class="col-4">
+                <div class="col-2">
                 </div>
                 
             </div>
@@ -108,6 +104,29 @@
                     <div id="chatBox"></div>
                 </div>
 
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
+
+            <div class="row">
+
+                <!-- Spacing -->
+                <div class="col-2">
+                </div>
+
+                <!-- Message Submit -->
+                <div class="col-8 p-1">
+                    <div class="card">
+                       <div id="chatArea"></div>
+                    </div>
+                </div>
+                
+              
                 <!-- Spacing -->
                 <div class="col-2">
                 </div>

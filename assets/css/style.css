@@ -22,3 +22,17 @@
 .scoreboard1 {
     margin-bottom: 0;
 }
+
+#name {
+    width: 300px;
+}
+
+#nameInput {
+    overflow: hidden;
+    margin: auto;
+    width: 50%
+}
+
+#chatArea {
+    float: left;
+}
